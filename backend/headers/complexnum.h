@@ -14,6 +14,6 @@ class ComplexNum {
     void setReal(double real);
     void setImag(double imag);
   private:
-    double real; 
+    double real;
     double imag;
-}
+};

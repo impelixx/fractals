@@ -1,8 +1,14 @@
-#include <iostream>
-#include "headers/complexnum.h"
-#include "includes/httplib.h"
-#include "includes/json.h"
+#include <QCoreApplication>
+#include <QHttpServer>
+#include <QLoggingCategory>
+#include <QJsonObject>
+#include <QUrlQuery>
 
-int main() {
-  httplib::Server srv;
+#include <chrono>
+
+int main(int argc, char** argv){
+    QCoreApplication app(argc, argv);
+    QHttpServer server;
+    server.listen(QHostAddress::LocalHost, 8000);
+    return app.exec();
 }

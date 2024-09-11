@@ -15,6 +15,7 @@ jspm_packages/
 
 # Distribution directories
 dist/
+.cmake
 
 # Typescript v1 declaration files
 typings/
@@ -46,3 +47,9 @@ backend/simple_blog
 
 backend/simple_blog
 backend/simple_blog
+backend/.qt/QtDeploySupport.cmake
+backend/.qt/QtDeployTargets.cmake
+backend/cmake_install.cmake
+backend/back_autogen/timestamp
+backend/back_autogen/deps
+.gitignore

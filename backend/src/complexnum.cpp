@@ -1,42 +1,56 @@
-#include <complexnum.h>
+#include "../headers/complexnum.h"
+#include <cmath>
+
+// constructor
 
 ComplexNum::ComplexNum(double real, double imag) {
-  this->real = real;
-  this->imag = imag;
-}
-ComplexNum::ComplexNum operator+(const ComplexNum& other) {
-  return ComplexNum(this->real + other.real, this->imag + other.imag);
+    this->real = real;
+    this->imag = imag;
 }
 
-ComplexNum::ComplexNum operator*(const ComplexNum& other) {
-  return ComplexNum(this->real * other.real - this->imag * other.imag,
-                    this->real * other.imag + this->imag * other.real);
+// operator overloading
+
+ComplexNum ComplexNum::operator+(const ComplexNum& other) {
+    return ComplexNum(this->real + other.real, this->imag + other.imag);
 }
 
-ComplexNum::ComplexNum operator-(const ComplexNum& other) {
-  return ComplexNum(this->real - other.real, this->imag - other.imag);
+ComplexNum ComplexNum::operator*(const ComplexNum& other) {
+  return ComplexNum(this->real * other.real - this->imag * other.imag, this->real * other.imag + this->imag * other.real);
 }
 
-ComplexNum::double abs() {
-  return sqrt(this->real * this->real + this->imag * this->imag);
+ComplexNum ComplexNum::operator-(const ComplexNum& other) {
+    return ComplexNum(this->real - other.real, this->imag - other.imag);
 }
 
-ComplexNum::abs2() {
-  return this->real * this->real + this->imag * this->imag;
+ComplexNum ComplexNum::operator/(const ComplexNum& other) {
+    double denominator = other.real * other.real + other.imag * other.imag;
+    return ComplexNum((this->real * other.real + this->imag * other.imag) / denominator, (this->imag * other.real - this->real * other.imag) / denominator);
 }
 
-ComplexNum::double getReal() {
-  return this->real;
+// function
+
+double ComplexNum::abs() {
+    return sqrt(this->real * this->real + this->imag * this->imag);
 }
 
-ComplexNum::double getImag() {
-  return this->imag;
+double ComplexNum::abs2() {
+    return this->real * this->real + this->imag * this->imag;
 }
 
-ComplexNum::void setReal(double real) {
-  this->real = real;
+// setter and getter methods
+
+double ComplexNum::getReal() {
+    return this->real;
 }
 
-ComplexNum::void setImag(double imag) {
-  this->imag = imag;
+double ComplexNum::getImag() {
+    return this->imag;
+}
+
+void ComplexNum::setReal(double real) {
+    this->real = real;
+}
+
+void ComplexNum::setImag(double imag) {
+    this->imag = imag;
 }
