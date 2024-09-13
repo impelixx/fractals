@@ -18,7 +18,9 @@ find_package(Qt6 COMPONENTS
 
 
 add_executable(back src/main.cpp
-                    headers/complexnum.h)
+                    headers/complexnum.h
+                    includes/httplib.h
+                    includes/json.h)
 
 target_link_libraries(back
         Qt::Core
