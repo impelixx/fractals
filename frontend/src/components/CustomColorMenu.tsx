@@ -56,17 +56,11 @@ const CustomColorSchemeModal: React.FC<CustomColorSchemeModalProps> = ({
 		setColors(predefinedColorSchemes[scheme] || [])
 	}
 
-	const handleSave = () => {
-		if (selectedScheme === 'custom') {
-			if (true) {
-				onSave(colors)
-			} else {
-				// alert('Введите имя')
-			}
-		} else {
-			onSave(colors)
-		}
-	}
+  const handleSave = () => {
+    if (selectedScheme === 'custom') {
+      onSave(colors)
+    }
+  }
 
 	return (
 		<div

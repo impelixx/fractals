@@ -25,11 +25,11 @@ const App: React.FC = () => {
 
 	const handleSaveCustomColors = (colors: string[]) => {
 		setCustomColors(colors)
-		setColorScheme('custom') // Set the scheme to custom
-		setIsModalOpen(false) // Close the modal after saving
+		setColorScheme('custom')
+		
+		setIsModalOpen(false)
 	}
 
-	// Ensure resolvedColorScheme is always a string
 	const resolvedColorScheme: string =
 		colorScheme === 'custom' ? 'custom' : colorScheme
 
