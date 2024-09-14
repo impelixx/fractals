@@ -1,22 +1,39 @@
+import axios from 'axios'
+import { randomInt } from 'crypto';
 import React, { useRef, useState, useEffect } from 'react'
 
 const WIDTH = 1400
-const HEIGHT = 1000
+const HEIGHT = 980
+
+let API = async (cx: number, cy: number, maxIter: number): Promise<void> => {
+	let color: string = "black"
+	try {
+		const response = await axios.get(
+			`http://localhost:8080/point?x=${cx}&y=${cy}&maxIter=${maxIter}`
+		)
+		console.log(response.data)
+		const color = response.data.color
+	} catch (error) {
+		console.error(error)
+	}
+}
 
 const mandelbrot = (cx: number, cy: number, maxIter: number): number => {
 	let x = 0
 	let y = 0
 	let iter = 0
-
 	while (x * x + y * y <= 4 && iter < maxIter) {
 		const xTemp = x * x - y * y + cx
 		y = 2 * x * y + cy
 		x = xTemp
 		iter++
 	}
-
 	return iter
 }
+
+// setInterval(() => {
+// 	API(10, 10, 1000) // Example values, replace with actual values as needed
+// }, 10000)
 
 const drawMandelbrot = (
 	ctx: CanvasRenderingContext2D,
@@ -66,6 +83,21 @@ const drawMandelbrot = (
 										(iter * 15) % 255
 								  })`
 						break
+					case 'graphic':
+						const r = (iter * 5) % 255
+						const g = (iter * 10) % 255
+						const b = (iter * 15) % 255
+						color = iter === maxIter ? 'black' : `rgb(${r}, ${g}, ${b})`
+						break
+					case 'default': // New color scheme for default
+						const t = iter / maxIter
+						color =
+							iter === maxIter
+								? 'black'
+								: `rgb(${Math.floor(255 * t)}, ${Math.floor(
+										255 * (1 - t)
+								  )}, 255)`
+						break
 					case 'grayscale':
 					default:
 						color =
@@ -88,12 +120,39 @@ interface MandelbrotCanvasProps {
 	maxIter: number
 	colorScheme: string
 	customColors?: string[]
+	setZoomRect: React.Dispatch<
+		React.SetStateAction<{
+			xMin: number
+			xMax: number
+			yMin: number
+			yMax: number
+		}>
+	>
+	setPrevZoomRect: React.Dispatch<
+		React.SetStateAction<{
+			xMin: number
+			xMax: number
+			yMin: number
+			yMax: number
+		} | null>
+	>
+	zoomRect: {
+		xMin: number
+		xMax: number
+		yMin: number
+		yMax: number
+	}
+	onRevertZoom: () => void
 }
 
 const MandelbrotCanvas: React.FC<MandelbrotCanvasProps> = ({
 	maxIter,
 	colorScheme,
 	customColors,
+	setZoomRect,
+	setPrevZoomRect,
+	zoomRect,
+	onRevertZoom,
 }) => {
 	const canvasRef = useRef<HTMLCanvasElement | null>(null)
 	const [rect, setRect] = useState<{
@@ -102,17 +161,6 @@ const MandelbrotCanvas: React.FC<MandelbrotCanvasProps> = ({
 		x2: number
 		y2: number
 	} | null>(null)
-	const [zoomRect, setZoomRect] = useState<{
-		xMin: number
-		xMax: number
-		yMin: number
-		yMax: number
-	}>({
-		xMin: -2.5,
-		xMax: 1.5,
-		yMin: -1.5,
-		yMax: 1.5,
-	})
 
 	useEffect(() => {
 		if (canvasRef.current) {
@@ -195,6 +243,7 @@ const MandelbrotCanvas: React.FC<MandelbrotCanvasProps> = ({
 			const centerX = (xMin + xMax) / 2
 			const centerY = (yMin + yMax) / 2
 
+			setPrevZoomRect(zoomRect)
 			setZoomRect({
 				xMin: centerX - (xRange / 2) * (1 + padding),
 				xMax: centerX + (xRange / 2) * (1 + padding),
@@ -218,14 +267,13 @@ const MandelbrotCanvas: React.FC<MandelbrotCanvasProps> = ({
 			/>
 			{rect && (
 				<div
-					className='absolute border-2 border-red-600 rounded shadow-md'
+					className='absolute border-2 border-red-600 shadow-md'
 					style={{
 						left: rect.x1,
 						top: rect.y1,
 						width: rect.x2 - rect.x1,
 						height: rect.y2 - rect.y1,
 						pointerEvents: 'none',
-						boxSizing: 'border-box',
 					}}
 				/>
 			)}

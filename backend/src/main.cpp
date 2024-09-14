@@ -1,42 +1,44 @@
 #include <iostream>
 #include <string>
+#include <cmath>
 #include "../includes/httplib.h"
-#include "../includes/json.h" // Для работы с JSON (используйте библиотеку nlohmann::json)
+#include "../includes/json.h"
+#include "../headers/complexnum.h"
 
 using json = nlohmann::json;
 
-// Функция, которая возвращает цвет в зависимости от параметров x и y
-std::string getPointColor(int x, int y) {
-    if (x > 0 && y > 0) {
-        return "red";
-    } else if (x < 0 && y > 0) {
-        return "blue"; 
-    } else if (x < 0 && y < 0) {
-        return "green";
-    } else if (x > 0 && y < 0) {
-        return "yellow";
-    } else if (x == 0 || y == 0) {
-        return "black";
+int calculateMandelbrotIterations(double x, double y, int maxIter) {
+    ComplexNum z(0.0, 0.0);
+    ComplexNum c(x, y);
+
+    int iter = 0;
+    while (z.abs() <= 2.0 && iter < maxIter) {
+        z = z * z + c; // z(n+1) = z(n)^2 + c
+        ++iter;
     }
-    return "white";
+
+    return iter;
 }
 
 int main() {
     httplib::Server svr;
-
-     svr.set_post_routing_handler([](const auto& req, auto& res) {
-     res.set_header("Access-Control-Allow-Origin", "*");
-     res.set_header("Access-Control-Allow-Headers", "*");
-     });
-
+    svr.set_post_routing_handler([](const auto& req, auto& res) {
+        res.set_header("Access-Control-Allow-Origin", "*");
+        res.set_header("Access-Control-Allow-Headers", "*");
+    });
     svr.Get("/point", [](const httplib::Request& req, httplib::Response& res) {
         if (req.has_param("x") && req.has_param("y")) {
-            int x = std::stoi(req.get_param_value("x"));
-            int y = std::stoi(req.get_param_value("y"));
-            std::cout << x << ' ' << y << std::endl;
-            std::string color = getPointColor(x, y);
+            double x = std::stod(req.get_param_value("x"));
+            double y = std::stod(req.get_param_value("y"));
+            std::cout << "Point: (" << x << ", " << y << ")" << std::endl;
+            int maxIter = 1000;
+            if (req.has_param("maxIter")) {
+                maxIter = std::stoi(req.get_param_value("maxIter"));
+            }   
+            int iterations = calculateMandelbrotIterations(x, y, maxIter);
+
             json response;
-            response["color"] = color;
+            response["iterations"] = iterations;
             res.set_content(response.dump(), "application/json");
         } else {
             res.status = 400;
