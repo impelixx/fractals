@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/fractals/static/css/main.fd9ac477.css",
-    "main.js": "/fractals/static/js/main.84fce2a3.js",
+    "main.js": "/fractals/static/js/main.09102585.js",
     "index.html": "/fractals/index.html",
     "main.fd9ac477.css.map": "/fractals/static/css/main.fd9ac477.css.map",
-    "main.84fce2a3.js.map": "/fractals/static/js/main.84fce2a3.js.map"
+    "main.09102585.js.map": "/fractals/static/js/main.09102585.js.map"
   },
   "entrypoints": [
     "static/css/main.fd9ac477.css",
-    "static/js/main.84fce2a3.js"
+    "static/js/main.09102585.js"
   ]
 }
