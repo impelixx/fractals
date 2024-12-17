@@ -54,3 +54,4 @@ backend/back_autogen/timestamp
 backend/back_autogen/deps
 .gitignore
 build/
+backend/back_autogen/
