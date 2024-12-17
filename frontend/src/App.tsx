@@ -110,12 +110,6 @@ const App: React.FC = () => {
 				>
 					Вернуться работает пока только 1 раз
 				</button>
-				<button
-					onClick={() => setMaxIter(10000)}
-					className='p-2 text-white bg-green-500 rounded'
-				>
-					Для Алексея Владимировича
-				</button>
 				<div className='mt-4 text-gray-300'>
 					<h2 className='mb-2 text-lg font-semibold'>
 						О множестве Мандельброта
